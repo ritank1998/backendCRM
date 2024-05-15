@@ -6,7 +6,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 // MongoDB connection URL
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb+srv://rihinatechorzo:Ritank%401998@cluster1.281wep1.mongodb.net/?retryWrites=true&w=majority&appName=cluster1';
 const dbName = 'mydb';
 
 // Connect to MongoDB
