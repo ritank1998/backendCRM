@@ -313,6 +313,7 @@ export const receptionFilterforInactiveClient = async (req, res) => {
 export const inactiveClients = async (req, res) => {
     try {
         const clients = await inactive.find({})
+        console.log(clients)
         res.status(200).json(clients)
     }
     catch (err) {
