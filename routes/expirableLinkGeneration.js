@@ -32,39 +32,41 @@ const Token = mongoose.model('Token', tokenSchema);
 export const generateLink = async (req, res) => {
   const { client } = req.body;
   try {
-      const token = generateToken();
-      const expiresAt = new Date();
-      expiresAt.setSeconds(expiresAt.getSeconds() + 600); // Expires in 40 seconds
+    const token = generateToken();
+    const expiresAt = new Date();
+    expiresAt.setSeconds(expiresAt.getSeconds() + 600); // Expires in 600 seconds (10 minutes)
 
-      // Save the token and expiration timestamp in the database
-      const newToken = new Token({ token, expiresAt });
-      await newToken.save();
+    // Save the token and expiration timestamp in the database
+    const newToken = new Token({ token, expiresAt });
+    await newToken.save();
 
-      const expirableLink = `http://localhost:3000/selfregistration?token=${token}`;
+    const expirableLink = `http://localhost:3000/selfregistration?token=${token}`;
 
-      // Send the expirable link as the response
-      res.status(200).json({ expirableLink });
+    // Send the expirable link as the response
+    res.status(200).json({ expirableLink });
 
-      // Delete token from the database after expiration
-      setTimeout(async () => {
-          await Token.deleteOne({ token });
-      }, 600000); // 40 seconds in milliseconds
+    // Delete token from the database after expiration
+    setTimeout(async () => {
+      await Token.deleteOne({ token });
+    }, 600000); // 10 minutes in milliseconds
 
-      // Send email with expirable link
-      const payload = JSON.stringify({ expLink: expirableLink, client });
-      const response = await fetch(` https://backend-crm-eight.vercel.app/crm/sendmail`, {
-          method: 'POST',
-          body: payload,
-          headers: {
-              "Content-Type": 'application/json'
-          }
-      });
+    // Send email with expirable link
+    const payload = JSON.stringify({ expLink: expirableLink, client });
+    const response = await fetch('https://backend-crm-eight.vercel.app/crm/sendmail', {
+      method: 'POST',
+      body: payload,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const responseBody = await response.json();
+    console.log('Email service response:', responseBody);
   } catch (error) {
-      console.error('Error generating link:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error generating link:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 // Route to check the validity of the token
 export const regLink = async (req, res) => {
   const {token} = req.body 

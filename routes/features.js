@@ -14,26 +14,30 @@ dotenv.config()
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'saxena.ritank@gmail.com',
-        pass: 'jxtyxdltbkihtcpc'
+      user: "saxena.ritank@gmail.com", // Use environment variables for sensitive data
+      pass: "jxtyxdltbkihtcpc"  // Use environment variables for sensitive data
     }
-});
-export const sendEmail = async (req, res) => {
+  });
+  
+  export const sendEmail = async (req, res) => {
     const { expLink, client } = req.body;
     try {
-        let mailOptions = {
-            from: 'saxena.ritank@gmail.com',
-            to: client,
-            subject: 'Self Registration Form',
-            text:`Hi , Thank You for Visiting Us , Please proceed with the mentioned Link to complete your registration and Payment Process ${expLink}`
-        };
-        const response = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + response);
-        res.status(200).json({ response });
+      let mailOptions = {
+        from: "saxena.ritank@gmail.com",
+        to: client,
+        subject: 'Self Registration Form',
+        text: `Hi, Thank you for visiting us. Please proceed with the mentioned link to complete your registration and payment process: ${expLink}`
+      };
+  
+      const response = await transporter.sendMail(mailOptions);
+      console.log('Email sent:', response);
+      res.status(200).json({ response: response.response });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      console.error('Error sending email:', error);
+      res.status(500).json({ error: error.message });
     }
-};
+  };
+
 export const addPoints = async(req,res)=>{
     try{
          const length = await userDetails.countDocuments()
