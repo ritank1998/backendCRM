@@ -52,7 +52,7 @@ export const generateLink = async (req, res) => {
 
       // Send email with expirable link
       const payload = JSON.stringify({ expLink: expirableLink, client });
-      const response = await fetch(`http://${process.env.BACKEND_DOMAIN}/sendmail`, {
+      const response = await fetch(` https://backend-crm-eight.vercel.app/crm/sendmail`, {
           method: 'POST',
           body: payload,
           headers: {
