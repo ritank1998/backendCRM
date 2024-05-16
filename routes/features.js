@@ -14,16 +14,21 @@ dotenv.config()
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: "saxena.ritank@gmail.com", // Use environment variables for sensitive data
-      pass: "jxtyxdltbkihtcpc"  // Use environment variables for sensitive data
-    }
+      user: "saxena.ritank@gmail.com",
+      pass: "jxtyxdltbkihtcpc"
+    },
+    // Optional: Enable TLS for secure connections (recommended)
+    secure: true,
+    // Optional for less secure apps (for testing only, use secure alternative if possible)
+    // tls: { rejectUnauthorized: false }
   });
   
   export const sendEmail = async (req, res) => {
     const { expLink, client } = req.body;
+  
     try {
       let mailOptions = {
-        from: "saxena.ritank@gmail.com",
+        from: email, // Use verified sender email
         to: client,
         subject: 'Self Registration Form',
         text: `Hi, Thank you for visiting us. Please proceed with the mentioned link to complete your registration and payment process: ${expLink}`
@@ -37,7 +42,6 @@ let transporter = nodemailer.createTransport({
       res.status(500).json({ error: error.message });
     }
   };
-
 export const addPoints = async(req,res)=>{
     try{
          const length = await userDetails.countDocuments()
