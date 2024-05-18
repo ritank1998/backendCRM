@@ -28,7 +28,7 @@ let transporter = nodemailer.createTransport({
   
     try {
       let mailOptions = {
-        from: email, // Use verified sender email
+        from: "saxena.ritank@gmail.com", // Use verified sender email
         to: client,
         subject: 'Self Registration Form',
         text: `Hi, Thank you for visiting us. Please proceed with the mentioned link to complete your registration and payment process: ${expLink}`
